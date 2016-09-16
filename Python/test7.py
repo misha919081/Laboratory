@@ -1,0 +1,14 @@
+a = float(input())  # test7
+x = float(input())
+g = a+x
+print("g=",g)
+g = a+x*a
+print("g1=",g)
+g = (a+x)*a
+print("g2=",g)
+g = (a+x)/3.5
+print("g3=",g)
+g = (a+x)/(2+a)
+print("g4=",g)
+g = g/10
+print("g5=",g)
