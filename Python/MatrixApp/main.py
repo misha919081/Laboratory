@@ -1,9 +1,9 @@
 import sys
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QTabWidget, QDesktopWidget, QVBoxLayout, \
-    QHBoxLayout, QSplitter, QFrame, QPushButton, QAction
+    QHBoxLayout, QSplitter, QFrame, QPushButton, QAction, QLineEdit, QGridLayout, QLabel
 from PyQt5.QtCore import pyqtSlot, Qt
 
-class Run(QMainWindow):
+class Run(QWidget):
 
     def __init__(self):  # Class initialization
         super().__init__()
@@ -15,7 +15,10 @@ class Run(QMainWindow):
         self.center()
 
         self.tab_widget = Tab_Widget(self)
-        self.setCentralWidget(self.tab_widget)  # Addition tab list in main window
+        self.layout = QVBoxLayout(self)
+        self.layout.addWidget(self.tab_widget)
+        self.setLayout(self.layout)
+        # self.setCentralWidget(self.tab_widget)  # Addition tab list in main window
 
         self.show()  #Show application
 
@@ -25,10 +28,13 @@ class Run(QMainWindow):
         frame.moveCenter(mid)
         self.move(frame.topLeft())
 
-class Tab_Widget(QWidget):
+    def exit(self):
+        self.close()
+
+class Tab_Widget(Run):
 
     def __init__(self, parent):  # Class initialization
-        super(QWidget, self).__init__(parent)
+        super(Run, self).__init__(parent)
         self.layout = QVBoxLayout(self)
 
         # Create tab list
@@ -45,9 +51,50 @@ class Tab_Widget(QWidget):
         # Create first tab
         # Create 3 basic window as QFrame
         self.tab1.window1 = QFrame(self)
-        self.tab1.window1.button = QPushButton('Close', self.tab1)
-        self.tab1.window1.button.move(300, 300)
-        self.tab1.window1.button.clicked.connect(self.exitAction)
+
+        self.tab1.label = QLabel('Введите матрицу', self.tab1)
+        self.tab1.move(130, 30)
+
+        MatrixEnter1 = QLineEdit(self.tab1.window1)
+        MatrixEnter1.resize(45, 30)
+        MatrixEnter2 = QLineEdit(self.tab1.window1)
+        MatrixEnter2.resize(45, 30)
+        MatrixEnter3 = QLineEdit(self.tab1.window1)
+        MatrixEnter3.resize(45, 30)
+        MatrixEnter4 = QLineEdit(self.tab1.window1)
+        MatrixEnter4.resize(45, 30)
+        MatrixEnter5 = QLineEdit(self.tab1.window1)
+        MatrixEnter5.resize(45, 30)
+        MatrixEnter6 = QLineEdit(self.tab1.window1)
+        MatrixEnter6.resize(45, 30)
+        MatrixEnter7 = QLineEdit(self.tab1.window1)
+        MatrixEnter7.resize(45, 30)
+        MatrixEnter8 = QLineEdit(self.tab1.window1)
+        MatrixEnter8.resize(45, 30)
+        MatrixEnter9 = QLineEdit(self.tab1.window1)
+        MatrixEnter9.resize(45, 30)
+
+        self.tab1.Matrix = QGridLayout(self.tab1.window1)
+        self.tab1.Matrix.addWidget(MatrixEnter1, 1, 1)
+        self.tab1.Matrix.addWidget(MatrixEnter2, 1, 2)
+        self.tab1.Matrix.addWidget(MatrixEnter3, 1, 3)
+        self.tab1.Matrix.addWidget(MatrixEnter4, 2, 1)
+        self.tab1.Matrix.addWidget(MatrixEnter5, 2, 2)
+        self.tab1.Matrix.addWidget(MatrixEnter6, 2, 3)
+        self.tab1.Matrix.addWidget(MatrixEnter7, 3, 1)
+        self.tab1.Matrix.addWidget(MatrixEnter8, 3, 2)
+        self.tab1.Matrix.addWidget(MatrixEnter9, 3, 3)
+        self.tab1.Matrix.setContentsMargins(180, 200, 180, 200)
+        self.tab1.window1.setLayout(self.tab1.Matrix)
+
+        self.tab1.windowContent = QHBoxLayout(self)
+        self.tab1.windowContent.addWidget(self.tab1.label)
+        self.tab1.windowContent.addLayout(self.tab1.Matrix)
+
+        # button = QPushButton('Close', self.tab1.window1)
+        # button.setCheckable(True)
+        # button.move(300, 300)
+        # button.clicked.connect(self.exitAction)
         self.tab1.window1.setFrameShape(QFrame.StyledPanel)
         self.tab1.window2 = QFrame(self)
         self.tab1.window2.setFrameShape(QFrame.StyledPanel)
@@ -127,8 +174,13 @@ class Tab_Widget(QWidget):
         self.layout.addWidget(self.tabs)
         self.setLayout(self.layout)
 
-    def exitAction(self):
-        self.close()
+        def center(self):  # Set central position for window
+            frame = self.frameGeometry()
+            mid = QDesktopWidget().availableGeometry().center()
+            frame.moveCenter(mid)
+            self.move(frame.topLeft())
+    # def exitAction(self):
+    #     self.close()
 
 # Running application
 if __name__ == "__main__":
