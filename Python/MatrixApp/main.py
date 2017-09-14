@@ -35,7 +35,7 @@ class Tab_Widget(Run):
 
     def __init__(self, parent):  # Class initialization
         super(Run, self).__init__(parent)
-        self.layout = QVBoxLayout(self)
+        layout = QVBoxLayout()
 
         # Create tab list
         self.tabs = QTabWidget()
@@ -52,44 +52,36 @@ class Tab_Widget(Run):
         # Create 3 basic window as QFrame
         self.tab1.window1 = QFrame(self)
 
-        self.tab1.label = QLabel('Введите матрицу', self.tab1)
-        self.tab1.move(130, 30)
+        label = QLabel('Введите матрицу')
+        labelLayout = QVBoxLayout()
+        labelLayout.addWidget(label, 0, Qt.AlignHCenter)
 
         MatrixEnter1 = QLineEdit(self.tab1.window1)
-        MatrixEnter1.resize(45, 30)
         MatrixEnter2 = QLineEdit(self.tab1.window1)
-        MatrixEnter2.resize(45, 30)
         MatrixEnter3 = QLineEdit(self.tab1.window1)
-        MatrixEnter3.resize(45, 30)
         MatrixEnter4 = QLineEdit(self.tab1.window1)
-        MatrixEnter4.resize(45, 30)
         MatrixEnter5 = QLineEdit(self.tab1.window1)
-        MatrixEnter5.resize(45, 30)
         MatrixEnter6 = QLineEdit(self.tab1.window1)
-        MatrixEnter6.resize(45, 30)
         MatrixEnter7 = QLineEdit(self.tab1.window1)
-        MatrixEnter7.resize(45, 30)
         MatrixEnter8 = QLineEdit(self.tab1.window1)
-        MatrixEnter8.resize(45, 30)
         MatrixEnter9 = QLineEdit(self.tab1.window1)
-        MatrixEnter9.resize(45, 30)
 
-        self.tab1.Matrix = QGridLayout(self.tab1.window1)
-        self.tab1.Matrix.addWidget(MatrixEnter1, 1, 1)
-        self.tab1.Matrix.addWidget(MatrixEnter2, 1, 2)
-        self.tab1.Matrix.addWidget(MatrixEnter3, 1, 3)
-        self.tab1.Matrix.addWidget(MatrixEnter4, 2, 1)
-        self.tab1.Matrix.addWidget(MatrixEnter5, 2, 2)
-        self.tab1.Matrix.addWidget(MatrixEnter6, 2, 3)
-        self.tab1.Matrix.addWidget(MatrixEnter7, 3, 1)
-        self.tab1.Matrix.addWidget(MatrixEnter8, 3, 2)
-        self.tab1.Matrix.addWidget(MatrixEnter9, 3, 3)
-        self.tab1.Matrix.setContentsMargins(180, 200, 180, 200)
-        self.tab1.window1.setLayout(self.tab1.Matrix)
+        Matrix = QGridLayout()
+        Matrix.addWidget(MatrixEnter1, 1, 1)
+        Matrix.addWidget(MatrixEnter2, 1, 2)
+        Matrix.addWidget(MatrixEnter3, 1, 3)
+        Matrix.addWidget(MatrixEnter4, 2, 1)
+        Matrix.addWidget(MatrixEnter5, 2, 2)
+        Matrix.addWidget(MatrixEnter6, 2, 3)
+        Matrix.addWidget(MatrixEnter7, 3, 1)
+        Matrix.addWidget(MatrixEnter8, 3, 2)
+        Matrix.addWidget(MatrixEnter9, 3, 3)
+        Matrix.setContentsMargins(180, 200, 180, 200)
 
-        self.tab1.windowContent = QHBoxLayout(self)
-        self.tab1.windowContent.addWidget(self.tab1.label)
-        self.tab1.windowContent.addLayout(self.tab1.Matrix)
+        windowContent = QVBoxLayout()
+        windowContent.addLayout(labelLayout)
+        windowContent.addLayout(Matrix)
+        self.tab1.window1.setLayout(windowContent)
 
         # button = QPushButton('Close', self.tab1.window1)
         # button.setCheckable(True)
@@ -114,7 +106,7 @@ class Tab_Widget(Run):
         self.tab1.content.setSizes([600, 400])
 
         # Addition splitter in tab
-        self.tab1.layout = QHBoxLayout(self)
+        self.tab1.layout = QHBoxLayout()
         self.tab1.layout.addWidget(self.tab1.content)
         self.tab1.setLayout(self.tab1.layout)
 
@@ -171,14 +163,9 @@ class Tab_Widget(Run):
         self.tab3.setLayout(self.tab3.layout)
 
         # Addition tab list in layout for main window
-        self.layout.addWidget(self.tabs)
-        self.setLayout(self.layout)
+        layout.addWidget(self.tabs)
+        self.setLayout(layout)
 
-        def center(self):  # Set central position for window
-            frame = self.frameGeometry()
-            mid = QDesktopWidget().availableGeometry().center()
-            frame.moveCenter(mid)
-            self.move(frame.topLeft())
     # def exitAction(self):
     #     self.close()
 
