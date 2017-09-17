@@ -1,7 +1,8 @@
 import sys
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QTabWidget, QDesktopWidget, QVBoxLayout, \
-    QHBoxLayout, QSplitter, QFrame, QPushButton, QAction, QLineEdit, QGridLayout, QLabel
+from PyQt5.QtWidgets import QApplication, QWidget, QTabWidget, QDesktopWidget, QVBoxLayout, \
+    QHBoxLayout, QSplitter, QFrame, QPushButton, QAction, QLineEdit, QGridLayout, QLabel, QSpinBox
 from PyQt5.QtCore import pyqtSlot, Qt
+from PyQt5.QtGui import QDoubleValidator
 
 class Run(QWidget):
 
@@ -56,37 +57,55 @@ class Tab_Widget(Run):
         labelLayout = QVBoxLayout()
         labelLayout.addWidget(label, 0, Qt.AlignHCenter)
 
+        validator = QDoubleValidator()
+
         MatrixEnter1 = QLineEdit(self.tab1.window1)
+        MatrixEnter1.setValidator(validator)
         MatrixEnter2 = QLineEdit(self.tab1.window1)
+        MatrixEnter2.setValidator(validator)
         MatrixEnter3 = QLineEdit(self.tab1.window1)
+        MatrixEnter3.setValidator(validator)
         MatrixEnter4 = QLineEdit(self.tab1.window1)
+        MatrixEnter4.setValidator(validator)
         MatrixEnter5 = QLineEdit(self.tab1.window1)
+        MatrixEnter5.setValidator(validator)
         MatrixEnter6 = QLineEdit(self.tab1.window1)
+        MatrixEnter6.setValidator(validator)
         MatrixEnter7 = QLineEdit(self.tab1.window1)
+        MatrixEnter7.setValidator(validator)
         MatrixEnter8 = QLineEdit(self.tab1.window1)
+        MatrixEnter8.setValidator(validator)
         MatrixEnter9 = QLineEdit(self.tab1.window1)
+        MatrixEnter9.setValidator(validator)
+
+        MatrixSizeChangerW = QSpinBox(self.tab1.window1)
+        MatrixSizeChangerW.setButtonSymbols(0)
+        MatrixSizeChangerW.setMinimum(1)
+        MatrixSizeChangerW.setMaximum(10)
+        MatrixSizeChangerH = QSpinBox(self.tab1.window1)
+        MatrixSizeChangerH.setButtonSymbols(0)
+        MatrixSizeChangerH.setMinimum(1)
+        MatrixSizeChangerH.setMaximum(10)
 
         Matrix = QGridLayout()
-        Matrix.addWidget(MatrixEnter1, 1, 1)
-        Matrix.addWidget(MatrixEnter2, 1, 2)
-        Matrix.addWidget(MatrixEnter3, 1, 3)
-        Matrix.addWidget(MatrixEnter4, 2, 1)
-        Matrix.addWidget(MatrixEnter5, 2, 2)
-        Matrix.addWidget(MatrixEnter6, 2, 3)
-        Matrix.addWidget(MatrixEnter7, 3, 1)
-        Matrix.addWidget(MatrixEnter8, 3, 2)
-        Matrix.addWidget(MatrixEnter9, 3, 3)
-        Matrix.setContentsMargins(180, 200, 180, 200)
+        Matrix.addWidget(MatrixSizeChangerW, 1, 3)
+        Matrix.addWidget(MatrixEnter1, 2, 2)
+        Matrix.addWidget(MatrixEnter2, 2, 3)
+        Matrix.addWidget(MatrixEnter3, 2, 4)
+        Matrix.addWidget(MatrixSizeChangerH, 3, 1)
+        Matrix.addWidget(MatrixEnter4, 3, 2)
+        Matrix.addWidget(MatrixEnter5, 3, 3)
+        Matrix.addWidget(MatrixEnter6, 3, 4)
+        Matrix.addWidget(MatrixEnter7, 4, 2)
+        Matrix.addWidget(MatrixEnter8, 4, 3)
+        Matrix.addWidget(MatrixEnter9, 4, 4)
+        Matrix.setContentsMargins(35, 10, 65, 185)
 
         windowContent = QVBoxLayout()
         windowContent.addLayout(labelLayout)
         windowContent.addLayout(Matrix)
         self.tab1.window1.setLayout(windowContent)
 
-        # button = QPushButton('Close', self.tab1.window1)
-        # button.setCheckable(True)
-        # button.move(300, 300)
-        # button.clicked.connect(self.exitAction)
         self.tab1.window1.setFrameShape(QFrame.StyledPanel)
         self.tab1.window2 = QFrame(self)
         self.tab1.window2.setFrameShape(QFrame.StyledPanel)
@@ -97,13 +116,13 @@ class Tab_Widget(Run):
         self.tab1.description = QSplitter(Qt.Vertical)
         self.tab1.description.addWidget(self.tab1.window2)
         self.tab1.description.addWidget(self.tab1.window3)
-        self.tab1.description.setSizes([400, 200])
+        self.tab1.description.setSizes([450, 200])
 
         #Create splitter for all windows
         self.tab1.content = QSplitter(Qt.Horizontal)
         self.tab1.content.addWidget(self.tab1.window1)
         self.tab1.content.addWidget(self.tab1.description)
-        self.tab1.content.setSizes([600, 400])
+        self.tab1.content.setSizes([550, 400])
 
         # Addition splitter in tab
         self.tab1.layout = QHBoxLayout()
@@ -165,9 +184,6 @@ class Tab_Widget(Run):
         # Addition tab list in layout for main window
         layout.addWidget(self.tabs)
         self.setLayout(layout)
-
-    # def exitAction(self):
-    #     self.close()
 
 # Running application
 if __name__ == "__main__":
