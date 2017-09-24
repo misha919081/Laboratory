@@ -12,7 +12,7 @@ class Run(QWidget):
         self.initUI()
 
     def initUI(self):  # GUI initialization
-        self.resize(1300, 800)
+        self.resize(1920, 1080)
         self.center()
 
         tab_widget = Tab_Widget()
@@ -63,11 +63,12 @@ class Tab_Widget(QWidget):
         MatrixSizeChangerW.setButtonSymbols(0)
         MatrixSizeChangerW.setMinimum(1)
         MatrixSizeChangerW.setMaximum(10)
+        MatrixSizeChangerW.valueChanged.connect(tabM.changeMatrixWidth)
         MatrixSizeChangerH = QSpinBox(self.tab1.window1)
         MatrixSizeChangerH.setButtonSymbols(0)
         MatrixSizeChangerH.setMinimum(1)
         MatrixSizeChangerH.setMaximum(10)
-        MatrixSizeChangerH.valueChanged.connect(tabM.changeMatrixSize)
+        MatrixSizeChangerH.valueChanged.connect(tabM.changeMatrixHeight)
 
         labelLayout = QVBoxLayout()
         labelLayout.addWidget(label, 0, Qt.AlignHCenter)
@@ -75,7 +76,7 @@ class Tab_Widget(QWidget):
 
         MatrixField = QGridLayout()
         MatrixField.addWidget(MatrixSizeChangerH, 1, 1)
-        MatrixField.addWidget(tabM, 1, 2)
+        MatrixField.addLayout(tabM, 1, 2)
         MatrixField.setAlignment(Qt.AlignCenter)
 
         windowContent = QVBoxLayout()
@@ -94,13 +95,13 @@ class Tab_Widget(QWidget):
         self.tab1.description = QSplitter(Qt.Vertical)
         self.tab1.description.addWidget(self.tab1.window2)
         self.tab1.description.addWidget(self.tab1.window3)
-        self.tab1.description.setSizes([650, 300])
+        self.tab1.description.setSizes([1050, 400])
 
         # Create splitter for all windows
         self.tab1.content = QSplitter(Qt.Horizontal)
         self.tab1.content.addWidget(self.tab1.window1)
         self.tab1.content.addWidget(self.tab1.description)
-        self.tab1.content.setSizes([550, 500])
+        self.tab1.content.setSizes([870, 680])
 
         # Addition splitter in tab
         self.tab1.layout = QHBoxLayout()
@@ -163,7 +164,7 @@ class Tab_Widget(QWidget):
         layout.addWidget(self.tabs)
         self.setLayout(layout)
 
-class Matrix(QWidget):
+class Matrix(QGridLayout):
 
     def __init__(self):
         super().__init__()
@@ -172,30 +173,42 @@ class Matrix(QWidget):
 
     def initUI(self):
 
-        MatrixBasic = QGridLayout()
         MatrixEnter = []
         validator = QDoubleValidator()
 
-        for i in range(10):
+        for i in range(9):
             MatrixEnter.append(QLineEdit())
             MatrixEnter[i].setValidator(validator)
 
         count = 0
         for i in range(3):
             for j in range(3):
-                MatrixBasic.addWidget(MatrixEnter[count], i, j)
+                self.addWidget(MatrixEnter[count], i, j)
                 count += 1
 
-        self.setLayout(MatrixBasic)
+    def changeMatrixHeight(self):
 
-    def changeMatrixSize(self, MatrixBasic):
-
-        MatrixExpand = QLineEdit()
+        MatrixExpand = []
         validator = QDoubleValidator()
-        MatrixExpand.setValidator(validator)
 
-        MatrixBasic.addWidget(MatrixExpand, 3, 4)
+        size_parameter = self.rowCount()
 
+        for i in range(self.columnCount()):
+            MatrixExpand.append(QLineEdit())
+            MatrixExpand[i].setValidator(validator)
+            self.addWidget(MatrixExpand[i], size_parameter, i)
+
+    def changeMatrixWidth(self):
+
+        MatrixExpand = []
+        validator = QDoubleValidator()
+
+        size_patameter = self.columnCount()
+
+        for i in range(self.rowCount()):
+            MatrixExpand.append(QLineEdit())
+            MatrixExpand[i].setValidator(validator)
+            self.addWidget(MatrixExpand[i], i, size_patameter)
 
 if __name__ == "__main__":
 
