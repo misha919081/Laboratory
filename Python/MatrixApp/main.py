@@ -57,8 +57,6 @@ class Tab_Widget(QWidget):
 #======================================================================================================================#
         self.tab1.window1 = QFrame(self)
 
-        tabM = Matrix()
-
         label = QLabel('Введите матрицу')
 
         self.MatrixSizeChangerW = QSpinBox()
@@ -66,13 +64,15 @@ class Tab_Widget(QWidget):
         self.MatrixSizeChangerW.setButtonSymbols(0)
         self.MatrixSizeChangerW.setMinimum(1)
         self.MatrixSizeChangerW.setMaximum(10)
-        self.MatrixSizeChangerW.valueChanged.connect(tabM.changeMatrixWidth)
+        # self.MatrixSizeChangerW.valueChanged.connect(self.changeMatrixWidth)
         self.MatrixSizeChangerH = QSpinBox()
         self.MatrixSizeChangerH.setValue(3)
         self.MatrixSizeChangerH.setButtonSymbols(0)
         self.MatrixSizeChangerH.setMinimum(1)
         self.MatrixSizeChangerH.setMaximum(10)
-        self.MatrixSizeChangerH.valueChanged.connect(tabM.changeMatrixHeight)
+        # self.MatrixSizeChangerH.valueChanged.connect(self.changeMatrixHeight)
+
+        tabM = self.MatrixGenerate()
 
         labelLayout = QVBoxLayout()
         labelLayout.addWidget(label, 0, Qt.AlignHCenter)
@@ -199,52 +199,49 @@ class Tab_Widget(QWidget):
         layout.addWidget(self.tabs)
         self.setLayout(layout)
 
-class Matrix(QGridLayout):
+    def MatrixGenerate(self):
 
-    def __init__(self):
-        super().__init__()
-
-        self.initUI()
-
-    def initUI(self):
-
+        self.Matrix = QGridLayout()
         self.MatrixEnter = []
         validator = QDoubleValidator()
 
-        for i in range(9):
+        for i in range(100):
             self.MatrixEnter.append(QLineEdit())
             self.MatrixEnter[i].setValidator(validator)
 
         count = 0
-        for i in range(3):
-            for j in range(3):
-                self.addWidget(self.MatrixEnter[count], i, j)
+        for i in range(self.MatrixSizeChangerH.value()):
+            for j in range(self.MatrixSizeChangerW.value()):
+                self.Matrix.addWidget(self.MatrixEnter[count], i, j)
                 count += 1
+
+        return self.Matrix
 
     def changeMatrixHeight(self):
 
         validator = QDoubleValidator()
 
-        size_parameter = Tab_Widget().MatrixSizeChangerH.value()
+        size_parameter = self.MatrixSizeChangerW.value()
 
-        for i in range(self.columnCount()):
+        for i in range(self.Matrix.columnCount()):
             self.MatrixEnter.append(QLineEdit())
-            self.MatrixEnter[(self.rowCount() * self.columnCount()) - 1 + i].setValidator(validator)
-            self.addWidget(self.MatrixEnter[(self.rowCount() * self.columnCount()) - 1 + i], size_parameter, i)
+            self.MatrixEnter[(self.Matrix.rowCount() * self.Matrix.columnCount()) + i].setValidator(validator)
+            self.Matrix.addWidget(self.MatrixEnter[(self.Matrix.rowCount() * self.Matrix.columnCount()) + i], size_parameter, i)
 
     def changeMatrixWidth(self):
 
         validator = QDoubleValidator()
 
-        size_parameter = Tab_Widget().MatrixSizeChangerW.value()
+        if self.MatrixSizeChangerH.value() > self.Matrix.columnCount():
+            for i in range(self.Matrix.rowCount()):
+                    self.MatrixEnter.append(QLineEdit())
+                    self.MatrixEnter[(self.Matrix.rowCount() * self.Matrix.columnCount()) + i].setValidator(validator)
+                    self.Matrix.addWidget(self.MatrixEnter[(self.Matrix.rowCount() * self.Matrix.columnCount()) + i], i, self.MatrixSizeChangerH.value())
+        else:
+            for i in range(self.Matrix.rowCount()):
+                self.Matrix.removeWidget(self.MatrixEnter[(self.Matrix.rowCount() * self.Matrix.columnCount()) + i], i,
+                                      self.MatrixSizeChangerH.value())
 
-        for i in range(self.rowCount()):
-            self.MatrixEnter.append(QLineEdit())
-            self.MatrixEnter[(self.rowCount() * self.columnCount()) - 1 + i].setValidator(validator)
-            self.addWidget(self.MatrixEnter[(self.rowCount() * self.columnCount()) - 1 + i], i, size_parameter)
-
-    def determinant(self):
-        pass
 
 if __name__ == "__main__":
 
