@@ -20,7 +20,7 @@ class Run(QWidget):
         layout.addWidget(tab_widget)
         self.setLayout(layout)
 
-        self.setWindowTitle('Matrix handler v. 0.0.2.1')
+        self.setWindowTitle('Matrix handler v. 0.0.2.2')
 
         self.show()  #Show application
 
@@ -70,7 +70,7 @@ class Tab_Widget(QWidget):
         self.MatrixSizeChangerH.setButtonSymbols(0)
         self.MatrixSizeChangerH.setMinimum(1)
         self.MatrixSizeChangerH.setMaximum(10)
-        # self.MatrixSizeChangerH.valueChanged.connect(self.changeMatrixHeight)
+        self.MatrixSizeChangerH.valueChanged.connect(self.changeMatrixHeight)
 
         tabM = self.MatrixGenerate()
 
@@ -221,7 +221,7 @@ class Tab_Widget(QWidget):
         if self.MatrixSizeChangerH.value() > self.Matrix.rowCount():
             row = self.MatrixSizeChangerH.value()
             for i in range(self.Matrix.columnCount()):
-                self.Matrix.addWidget(self.MatrixEnter[i][row - 1], i, self.MatrixSizeChangerH.value() - 1)
+                self.Matrix.addWidget(self.MatrixEnter[i][row - 1], self.MatrixSizeChangerH.value() - 1, i)
 
     def changeMatrixWidth(self):
 
