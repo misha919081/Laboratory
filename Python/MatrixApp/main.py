@@ -21,7 +21,7 @@ class Run(QWidget):
         layout.addWidget(tab_widget)
         self.setLayout(layout)
 
-        self.setWindowTitle('Matrix handler v. 0.0.2.2')
+        self.setWindowTitle('Matrix handler v. 0.0.3')
 
         self.show()  #Show application
 
@@ -61,13 +61,13 @@ class Tab_Widget(QWidget):
         label = QLabel('Введите матрицу')
 
         self.MatrixSizeChangerW = QSpinBox()
-        self.MatrixSizeChangerW.setValue(10)
+        self.MatrixSizeChangerW.setValue(3)
         self.MatrixSizeChangerW.setButtonSymbols(0)
         self.MatrixSizeChangerW.setMinimum(1)
         self.MatrixSizeChangerW.setMaximum(10)
         self.MatrixSizeChangerW.valueChanged.connect(self.changeMatrixWidth)
         self.MatrixSizeChangerH = QSpinBox()
-        self.MatrixSizeChangerH.setValue(7)
+        self.MatrixSizeChangerH.setValue(3)
         self.MatrixSizeChangerH.setButtonSymbols(0)
         self.MatrixSizeChangerH.setMinimum(1)
         self.MatrixSizeChangerH.setMaximum(10)
@@ -203,55 +203,63 @@ class Tab_Widget(QWidget):
     def MatrixGenerate(self):
 
         self.Matrix = QGridLayout()
-        self.MatrixEnter = [[], [], [], [], [], [], [], [], [], []]
-        validator = QDoubleValidator()
-
-        for i in range(10):
-            for g in range(10):
-                self.MatrixEnter[i].append(QLineEdit())
-                self.MatrixEnter[i][g].setValidator(validator)
 
         for i in range(self.MatrixSizeChangerH.value()):
             for g in range(self.MatrixSizeChangerW.value()):
-                self.Matrix.addWidget(self.MatrixEnter[i][g], i, g)
+                self.Matrix.addWidget(QLineEdit(), i, g)
 
         return self.Matrix
 
     def changeMatrixHeight(self):
+        row = self.MatrixSizeChangerH.value()
+        column = self.MatrixSizeChangerW.value()
+        rowGrid = self.Matrix.rowCount()
 
-        if self.MatrixSizeChangerH.value() > self.Matrix.rowCount():
-            row = self.MatrixSizeChangerH.value()
-            for i in range(self.Matrix.columnCount()):
-                self.Matrix.addWidget(self.MatrixEnter[i][row - 1], self.MatrixSizeChangerH.value() - 1, i)
+        if row > rowGrid:
+            for i in range(column):
+                self.Matrix.addWidget(QLineEdit(), row - 1, i)
+
+        elif row < rowGrid:
+            while (self.Matrix.count()):
+                item = self.Matrix.takeAt(0)
+                widget = item.widget()
+                if widget is not None:
+                    widget.deleteLater()
+
+            for i in range(row):
+                for g in range(column):
+                    self.Matrix.addWidget(QLineEdit(), i, g)
+
+        elif row == rowGrid:
+            for i in range(column):
+                self.Matrix.addWidget(QLineEdit(), row - 1, i)
 
     def changeMatrixWidth(self):
+        row = self.MatrixSizeChangerH.value()
+        column = self.MatrixSizeChangerW.value()
+        columnGrid = self.Matrix.columnCount()
 
-        if self.MatrixSizeChangerW.value() > self.Matrix.columnCount():
-            column = self.MatrixSizeChangerW.value()
-            for i in range(self.Matrix.rowCount()):
-                self.Matrix.addWidget(self.MatrixEnter[column - 1][i], i, self.MatrixSizeChangerW.value() - 1)
-        elif self.MatrixSizeChangerW.value() < self.Matrix.columnCount():
-            column = self.Matrix.count() - 1
-            diff = self.Matrix.columnCount()
-            row = self.Matrix.rowCount()
-            print(column)
-            if self.MatrixSizeChangerW.value() % 2 != 0:
-                for i in range(row):
-                    print(column - i + (((diff % 2) + True) % 2))
-                    print('==========')
-                    self.Matrix.itemAt(column - i + ((((diff % 2) + True) % 2) * i)).widget().close()
-                    self.Matrix.takeAt(column - i + ((((diff % 2) + True) % 2) * i))
-                    column -= diff
-                    print(column)
-            elif self.MatrixSizeChangerW.value() % 2 == 0:
-                for i in range(row):
-                    print('==========')
-                    print(column)
-                    self.Matrix.itemAt(column).widget().close()
-                    self.Matrix.takeAt(column)
-                    column -= diff
-                    print(column)
-            print('   ')
+        if column > columnGrid:
+            for i in range(row):
+                self.Matrix.addWidget(QLineEdit(), i, column - 1)
+
+        elif column < columnGrid:
+            while(self.Matrix.count()):
+                item = self.Matrix.takeAt(0)
+                widget = item.widget()
+                if widget is not None:
+                    widget.deleteLater()
+
+            for i in range(row):
+                for g in range(column):
+                    self.Matrix.addWidget(QLineEdit(), i, g)
+
+        elif column == columnGrid:
+            for i in range(row):
+                self.Matrix.addWidget(QLineEdit(), i, column)
+
+    def determinant(self):
+        pass
 
 if __name__ == "__main__":
 
