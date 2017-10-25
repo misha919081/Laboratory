@@ -386,6 +386,7 @@ class Matrix(QWidget):
             self.ErrorReport.move(frame.topLeft())
 
             self.ErrorReport.show()
+
         else:
             MatrixData = []
             row = []
@@ -415,20 +416,56 @@ class Matrix(QWidget):
 
     def linEquation(self):
 
-        if self.MatrixBase.itemAt(1).widget().value() != self.MatrixBase.itemAt(0).widget().value():
-            self.ErrorReport = QWidget()
-            self.ErrorReport.setWindowTitle('Ошибка!')
-            self.ErrorReport.resize(400, 130)
-            label = QLabel('Ошибка! Число строк и столбцов\n в матрице должно совпадать', self.ErrorReport)
+        if self.MatrixBase.itemAt(1).widget().value() > self.MatrixBase.itemAt(0).widget().value():
+            MatrixData = []
+            MatrixValueData = []
+            row = []
+            k = 0
+
+            for i in range(self.MatrixBase.itemAt(1).widget().value()):
+                for g in range(self.MatrixBase.itemAt(0).widget().value()):
+                    item = self.MatrixGrid.itemAt(k)
+                    row.append(item.widget().value())
+                    k += 1
+                MatrixData.append([])
+                MatrixData[i].extend(row)
+                row.clear()
+            k = 0
+
+            for i in range(self.MatrixValues.count()):
+                item = self.MatrixValues.itemAt(i)
+                MatrixValueData.append(item.widget().value())
+
+            self.resultLinEqu = QWidget()
+            self.resultLinEqu.setWindowTitle('Результаты расчетов')
+            self.resultLinEqu.resize(400, 130)
+            label = QLabel('x = ' + str(dot(linalg.pinv(MatrixData), MatrixValueData)), self.resultLinEqu)
             label.setAlignment(Qt.AlignCenter)
             label.move(85, 60)
 
-            frame = self.ErrorReport.frameGeometry()
+            frame = self.resultLinEqu.frameGeometry()
             mid = QDesktopWidget().availableGeometry().center()
             frame.moveCenter(mid)
-            self.ErrorReport.move(frame.topLeft())
+            self.resultLinEqu.move(frame.topLeft())
 
-            self.ErrorReport.show()
+            self.resultLinEqu.show()
+
+        elif self.MatrixBase.itemAt(1).widget().value() != self.MatrixBase.itemAt(0).widget().value():
+
+            self.resultLinEqu = QWidget()
+            self.resultLinEqu.setWindowTitle('Результаты расчетов')
+            self.resultLinEqu.resize(400, 130)
+            label = QLabel(('Система не имеет решений'), self.resultLinEqu)
+            label.setAlignment(Qt.AlignCenter)
+            label.move(85, 60)
+
+            frame = self.resultLinEqu.frameGeometry()
+            mid = QDesktopWidget().availableGeometry().center()
+            frame.moveCenter(mid)
+            self.resultLinEqu.move(frame.topLeft())
+
+            self.resultLinEqu.show()
+
         else:
             MatrixData = []
             MatrixValueData = []
@@ -471,6 +508,11 @@ class Matrix(QWidget):
         for i in range(row * column):
             item = self.MatrixGrid.itemAt(i)
             item.widget().setValue(0.0)
+
+        if type == 1:
+            for i in range(self.MatrixValues.count()):
+                item = self.MatrixValues.itemAt(i)
+                item.widget().setValue(0.0)
 
 if __name__ == "__main__":
 
